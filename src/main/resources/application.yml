@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Postsnet
+    username: postgres
+    password: um17tzno
+  mvc:
+    path match:
+      matching-strategy: ant_path_matcher
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.xml
+    drop-first: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+server:
+  port: 8081

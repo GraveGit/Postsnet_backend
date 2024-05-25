@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Таблица Users -->
+    <changeSet id="1" author="GraveGit">
+        <createTable tableName="USERS">
+            <column name="user_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password_hash" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Таблица COMMUNITIES -->
+    <changeSet id="2" author="GraveGit">
+        <createTable tableName="COMMUNITIES">
+            <column name="community_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="COMMUNITIES" baseColumnNames="user_id"
+                referencedTableName="USERS" referencedColumnNames="user_id"
+                constraintName="fk_communities_users"/>
+    </changeSet>
+
+    <!-- Таблица Posts -->
+    <changeSet id="3" author="GraveGit">
+        <createTable tableName="POSTS">
+            <column name="post_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="TEXT"/>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="community_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="POSTS" baseColumnNames="user_id"
+                referencedTableName="USERS" referencedColumnNames="user_id"
+                constraintName="fk_posts_users"/>
+        <addForeignKeyConstraint
+                baseTableName="POSTS" baseColumnNames="community_id"
+                referencedTableName="COMMUNITIES" referencedColumnNames="community_id"
+                constraintName="fk_posts_communities"/>
+    </changeSet>
+
+    <!-- Таблица Comments -->
+    <changeSet id="4" author="GraveGit">
+        <createTable tableName="COMMENTS">
+            <column name="comment_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="content" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_comment_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="COMMENTS" baseColumnNames="user_id"
+                referencedTableName="USERS" referencedColumnNames="user_id"
+                constraintName="fk_comments_users"/>
+        <addForeignKeyConstraint
+                baseTableName="COMMENTS" baseColumnNames="post_id"
+                referencedTableName="POSTS" referencedColumnNames="post_id"
+                constraintName="fk_comments_posts"/>
+        <addForeignKeyConstraint
+                baseTableName="COMMENTS" baseColumnNames="parent_comment_id"
+                referencedTableName="COMMENTS" referencedColumnNames="comment_id"
+                constraintName="fk_comments_comments"/>
+    </changeSet>
+
+    <!-- Таблица Votes -->
+    <changeSet id="5" author="GraveGit">
+        <createTable tableName="VOTES">
+            <column name="vote_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vote_type" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="VOTES" baseColumnNames="user_id"
+                referencedTableName="USERS" referencedColumnNames="user_id"
+                constraintName="fk_votes_users"/>
+        <addForeignKeyConstraint
+                baseTableName="VOTES" baseColumnNames="post_id"
+                referencedTableName="POSTS" referencedColumnNames="post_id"
+                constraintName="fk_votes_posts"/>
+    </changeSet>
+
+    <!-- Таблица Subscriptions -->
+    <changeSet id="6" author="GraveGit">
+        <createTable tableName="SUBSCRIPTIONS">
+            <column name="subscription_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="community_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="SUBSCRIPTIONS" baseColumnNames="user_id"
+                referencedTableName="USERS" referencedColumnNames="user_id"
+                constraintName="fk_subscriptions_users"/>
+        <addForeignKeyConstraint
+                baseTableName="SUBSCRIPTIONS" baseColumnNames="community_id"
+                referencedTableName="COMMUNITIES" referencedColumnNames="community_id"
+                constraintName="fk_subscriptions_communities"/>
+    </changeSet>
+
+    <!--Таблица Media -->
+    <changeSet id="7" author="GraveGit">
+        <createTable tableName="MEDIA">
+            <column name="media_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="content" type="JSONB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="community_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="MEDIA" baseColumnNames="user_id"
+                referencedTableName="USERS" referencedColumnNames="user_id"
+                constraintName="fk_media_users"/>
+        <addForeignKeyConstraint
+                baseTableName="MEDIA" baseColumnNames="community_id"
+                referencedTableName="COMMUNITIES" referencedColumnNames="community_id"
+                constraintName="fk_media_communities"/>
+        <addForeignKeyConstraint
+                baseTableName="MEDIA" baseColumnNames="post_id"
+                referencedTableName="POSTS" referencedColumnNames="post_id"
+                constraintName="fk_media_posts"/>
+
+    </changeSet>
+
+</databaseChangeLog>

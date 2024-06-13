@@ -36,4 +36,5 @@ public class Post {
     @JoinColumn(nullable = true, name = "community_id")
     private Community community;
 
+
 }

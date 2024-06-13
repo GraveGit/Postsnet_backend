@@ -6,7 +6,6 @@ import org.postsnet.entity.Comment;
 import org.postsnet.service.CommentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,31 +16,34 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/")
-    public ResponseEntity<Comment> create(@RequestBody CommentDTO dto) {
-        return ResponseEntity.ok(commentService.create(dto));
+    public Comment create(@RequestBody CommentDTO dto) {
+        return commentService.create(dto);
     }
 
     @GetMapping("/")
-    public ResponseEntity<Page<Comment>> readAll(Pageable pageable) {
-        Page<Comment> comments = commentService.readAll(pageable);
-        return ResponseEntity.ok(comments);
+    public Page<Comment> readAll(Pageable pageable) {
+        return commentService.readAll(pageable);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Comment> readById(@PathVariable Long id) {
-        return ResponseEntity.ok(commentService.readById(id));
+    public Comment readById(@PathVariable Long id) {
+        return commentService.readById(id);
+    }
 
+    @GetMapping("/post/{id}")
+    public Page<Comment> readByPostId(@PathVariable Long id, Pageable pageable) {
+        return commentService.readAllByPostId(id, pageable);
     }
 
     @PutMapping("/")
-    public ResponseEntity<Comment> update(@RequestBody Comment comment) {
-        return ResponseEntity.ok(commentService.update(comment));
+    public Comment update(@RequestBody Comment comment) {
+        return commentService.update(comment);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public String delete(@PathVariable Long id) {
         commentService.delete(id);
-        return ResponseEntity.ok().build();
+        return "Comment successfully deleted";
     }
 
 

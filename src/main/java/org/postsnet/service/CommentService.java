@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -19,10 +21,10 @@ public class CommentService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
-    public Comment create2(CommentDTO dto) {
-        Comment comment = CommentMapper.INSTANCE.commentDTOToComment(dto);
-        return commentRepository.save(comment);
-    }
+//    public Comment create2(CommentDTO dto) {
+//        Comment comment = CommentMapper.INSTANCE.commentDTOToComment(dto);
+//        return commentRepository.save(comment);
+//    }
 
     public Comment create(CommentDTO dto) {
         Comment parentComment = null;
@@ -33,9 +35,11 @@ public class CommentService {
         Comment comment = Comment.builder()
                 .content(dto.getContent())
                 .createdAt(dto.getCreatedAt())
+                //todo можно сохранять без запроса по id
                 .user(userRepository.findByUserId(dto.getUser()))
                 .post(postRepository.findByPostId(dto.getPost()))
                 .parentComment(parentComment)
+                .repliesComments(null)
                 .build();
 
         return commentRepository.save(comment);
@@ -43,6 +47,14 @@ public class CommentService {
 
     public Page<Comment> readAll(Pageable pageable) {
         return commentRepository.findAllBy(pageable);
+    }
+
+    public Page<Comment> readAllByPostId(Long id, Pageable pageable) {
+        return commentRepository.findAllByPostPostId(id, pageable);
+    }
+
+    public List<Comment> readAllByParentCommentId(Long id) {
+        return commentRepository.findAllByParentComment_CommentId(id);
     }
 
     public Comment update(Comment comment) {

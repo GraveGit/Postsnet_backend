@@ -1,9 +1,12 @@
 package org.postsnet.entity;
 
 import lombok.*;
+import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,4 +39,8 @@ public class Comment {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(nullable = true, name = "parent_comment_id", referencedColumnName = "comment_id")
     private Comment parentComment;
+
+    @OneToMany(mappedBy ="parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Comment> repliesComments = new ArrayList<>();
+    //todo add listcomment lazy !! , jpql join fetch, join fetch limit???
 }

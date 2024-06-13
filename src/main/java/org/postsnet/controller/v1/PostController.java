@@ -30,7 +30,6 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseEntity<Post> readById(@PathVariable Long id) {
         return ResponseEntity.ok(postService.readById(id));
-
     }
 
     @PutMapping("/")

@@ -8,7 +8,9 @@ import org.postsnet.repository.CommentRepository;
 import org.postsnet.repository.PostRepository;
 import org.postsnet.repository.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,7 +41,7 @@ public class CommentService {
                 .user(userRepository.findByUserId(dto.getUser()))
                 .post(postRepository.findByPostId(dto.getPost()))
                 .parentComment(parentComment)
-                .repliesComments(null)
+                //.repliesComments(null)
                 .build();
 
         return commentRepository.save(comment);
@@ -51,6 +53,15 @@ public class CommentService {
 
     public Page<Comment> readAllByPostId(Long id, Pageable pageable) {
         return commentRepository.findAllByPostPostId(id, pageable);
+    }
+
+    public List<Comment> readRootComments() {
+        return commentRepository.findByParentCommentIsNull();
+    }
+
+    public List<Comment> readByParentCommentId(Long parentCommentId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").ascending());
+        return commentRepository.findByParentComment_CommentId(parentCommentId, pageable);
     }
 
     public List<Comment> readAllByParentCommentId(Long id) {

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/comments")
 @RequiredArgsConstructor
@@ -33,6 +35,17 @@ public class CommentController {
     @GetMapping("/post/{id}")
     public Page<Comment> readByPostId(@PathVariable Long id, Pageable pageable) {
         return commentService.readAllByPostId(id, pageable);
+    }
+
+    @GetMapping("/comments/root")
+    public List<Comment> readByParentCommentIdIsNull() {
+        return commentService.readRootComments();
+    }
+    @GetMapping("/replies/{parentId}")
+    public List<Comment> readByParentCommentId(@PathVariable Long parentId,
+                                    @RequestParam int page,
+                                    @RequestParam int size) {
+        return commentService.readByParentCommentId(parentId, page, size);
     }
 
     @PutMapping("/")

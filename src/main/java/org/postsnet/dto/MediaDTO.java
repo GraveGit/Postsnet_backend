@@ -5,24 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDTO {
+public class MediaDTO {
 
     private String content;
 
-    private LocalDateTime createdAt;
-
     private Long user;
 
+    private Long community;
+
     private Long post;
-
-    private Long parentComment;
-
-    //private List<Long> repliesComments;
 }

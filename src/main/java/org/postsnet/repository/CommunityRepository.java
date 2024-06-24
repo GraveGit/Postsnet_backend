@@ -9,4 +9,6 @@ public interface CommunityRepository extends JpaRepository<Community, Long> {
 
     Page<Community> findAllBy(Pageable pageable);
 
+    Community findByCommunityId(Long id);
+
 }

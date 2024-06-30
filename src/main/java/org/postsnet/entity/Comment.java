@@ -42,5 +42,5 @@ public class Comment {
 
 //    @OneToMany(mappedBy ="parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private List<Comment> repliesComments = new ArrayList<>();
-    //todo add listcomment lazy !! , jpql join fetch, join fetch limit???
+
 }

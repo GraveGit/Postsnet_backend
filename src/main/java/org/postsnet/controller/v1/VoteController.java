@@ -31,6 +31,4 @@ public class VoteController {
         voteService.delete(id);
         return ResponseEntity.ok().build();
     }
-
-
 }

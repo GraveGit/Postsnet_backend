@@ -17,18 +17,18 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/")
+    @PostMapping("/create")
     public ResponseEntity<User> create(@RequestBody UserDTO dto) {
         return ResponseEntity.ok(userService.create(dto));
     }
 
-    @GetMapping("/")
+    @GetMapping("/getall")
     public ResponseEntity<Page<User>> readAll(Pageable pageable) {
         Page<User> users = userService.readAll(pageable);
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("readbyid/{id}")
     public ResponseEntity<User> readById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.readById(id));
 

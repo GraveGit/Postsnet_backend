@@ -1,9 +1,6 @@
 package org.postsnet.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +8,10 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserDTO {
+
+    private Long userId;
 
     private String username;
 
@@ -20,4 +20,6 @@ public class UserDTO {
     private String passwordHash;
 
     private LocalDateTime createdAt;
+
+    private String token;
 }

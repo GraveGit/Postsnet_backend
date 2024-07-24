@@ -9,9 +9,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/communities")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class CommunityController {
 
     private final CommunityService communityService;
@@ -21,7 +25,7 @@ public class CommunityController {
         return ResponseEntity.ok(communityService.create(dto));
     }
 
-    @GetMapping("/")
+    @GetMapping("/getcom")
     public ResponseEntity<Page<Community>> readAll(Pageable pageable) {
         Page<Community> communities = communityService.readAll(pageable);
         return ResponseEntity.ok(communities);
